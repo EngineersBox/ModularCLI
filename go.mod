@@ -1,3 +1,3 @@
-module github.com/EngineersBox/ModuarCLI
+module github.com/EngineersBox/ModularCLI
 
 go 1.15
