@@ -8,22 +8,24 @@ A GoLang modular CLI
 package main
 
 import (
+	"flag"
 	"fmt"
-	"github.com/EngineersBox/ModularCLI/cli"
 	"log"
+	"strings"
+
+	"github.com/EngineersBox/ModularCLI/cli"
 )
 
 var commands = map[string]cli.SubCommand{
     "create": {
         ErrorHandler: flag.ExitOnError,
-        Arguments: []cli.Argument{
+        Arguments: []*cli.Argument{
             {
                 Type:         cli.TypeString,
                 Name:         "input",
                 DefaultValue: "",
                 HelpMsg:      "File to read from",
                 Required:     true,
-                Optional:     false,
             },
             {
                 Type:         cli.TypeBool,
@@ -31,20 +33,24 @@ var commands = map[string]cli.SubCommand{
                 DefaultValue: false,
                 HelpMsg:      "How many instances to create",
                 Required:     false,
-                Optional:     true,
             },
         },
     },
     "dataset": {
         ErrorHandler: flag.ExitOnError,
-        Arguments: []cli.Argument{
+        Arguments: []*cli.Argument{
             {
                 Type:         cli.TypeString,
                 Name:         "from",
                 DefaultValue: "",
                 HelpMsg:      "URL to retrieve data from",
                 Required:     true,
-                Optional:     false,
+				ValidateFunc: func(arg cli.TypedArgument) error {
+					if !strings.Contains(*arg.GetString(), "http") {
+						return fmt.Errorf("url must use HTTP protocol")
+					}
+					return nil
+				},
             },
             {
                 Type:         cli.TypeBool,
@@ -52,7 +58,6 @@ var commands = map[string]cli.SubCommand{
                 DefaultValue: false,
                 HelpMsg:      "Whether to import nested directories [default: false]",
                 Required:     false,
-                Optional:     true,
             },
             {
                 Type:         cli.TypeBool,
@@ -60,7 +65,6 @@ var commands = map[string]cli.SubCommand{
                 DefaultValue: false,
                 HelpMsg:      "How many files to read",
                 Required:     false,
-                Optional:     true,
             },
         },
     },
