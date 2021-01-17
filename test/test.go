@@ -40,6 +40,19 @@ var commands = map[string]cli.SubCommand{
 				Required:     false,
 			},
 		},
+		Parameters: []*cli.Parameter{
+			{
+				Type:     cli.TypeString,
+				Name:     "instance_type",
+				Position: 0,
+				ValidateFunc: func(param cli.Parameter) error {
+					if !strings.Contains(*param.GetString(), "s3") {
+						return fmt.Errorf("invalid instance type, must be 's3")
+					}
+					return nil
+				},
+			},
+		},
 	},
 }
 
@@ -52,6 +65,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(*schematicCli.Commands["test"].Params["instance_type"].GetString())
 	fmt.Println(*schematicCli.Commands["test"].Flags["file"].GetString())
 	fmt.Println(*schematicCli.Commands["test"].Flags["recursive"].GetBool())
 	fmt.Println(*schematicCli.Commands["test"].Flags["count"].GetInt())

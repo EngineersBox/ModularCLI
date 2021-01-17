@@ -1,6 +1,12 @@
 # ModularCLI
 A GoLang modular CLI
 
+## CLI format
+
+```Typescript
+<program> <command> <parameters...> <arguments...>
+```
+
 ## Example
 
 `main.go`:
@@ -45,12 +51,12 @@ var commands = map[string]cli.SubCommand{
                 DefaultValue: "",
                 HelpMsg:      "URL to retrieve data from",
                 Required:     true,
-				ValidateFunc: func(arg cli.TypedArgument) error {
-					if !strings.Contains(*arg.GetString(), "http") {
-						return fmt.Errorf("url must use HTTP protocol")
-					}
-					return nil
-				},
+                ValidateFunc: func(arg cli.TypedArgument) error {
+                    if !strings.Contains(*arg.GetString(), "http") {
+                        return fmt.Errorf("url must use HTTP protocol")
+                    }
+                    return nil
+                },
             },
             {
                 Type:         cli.TypeBool,
@@ -67,6 +73,19 @@ var commands = map[string]cli.SubCommand{
                 Required:     false,
             },
         },
+        Parameters: []*cli.Parameter{
+            {
+                Type: cli.TypeString,
+                Name: "format",
+                Position: 0,
+                ValidateFunc: func(param cli.Parameter) error {
+                    if !strings.Contains(*param.GetString(), "aws::") {
+                        return fmt.Errorf("invalid instance type, must be prefixed by 'aws::'")
+                    }
+                    return nil
+                },
+            },
+        },
     },
 }
 
@@ -81,6 +100,7 @@ func main() {
         log.Fatal(err)
     }
 	
+    fmt.Println(*schematicCli.Commands["dataset"].Flags["format"].GetString())
     fmt.Println(*schematicCli.Commands["dataset"].Flags["from"].GetString())
     fmt.Println(*schematicCli.Commands["dataset"].Flags["count"].GetInt())
     fmt.Println(*schematicCli.Commands["dataset"].Flags["recursive"].GetBool())
@@ -90,11 +110,12 @@ func main() {
 Usage:
 ```bash
 go build -o out/cli_test main.go
-./out/cli_test dataset --from=localhost:8080 --count=28 --recursive
+./out/cli_test dataset aws::s3 --from=localhost:8080 --count=28 --recursive
 ```
 
 Result:
 ```text
+aws::s3
 localhost:8080
 28
 true

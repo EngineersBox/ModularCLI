@@ -12,7 +12,7 @@ type Argument struct {
 	Required     bool
 	HelpMsg      string
 	ValidateFunc ArgValidateFunc
-	Value        *interface{}
+	Value        interface{}
 	TypedArgument
 }
 
