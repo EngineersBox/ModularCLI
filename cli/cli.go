@@ -24,26 +24,26 @@ func (c *CLI) AddCommand(name string, handler flag.ErrorHandling) {
 	}
 }
 
-func (c *CLI) AddCommandArgs(cmdName string, arg *Argument) error {
+func (c *CLI) AddCommandArgs(cmdName string, flag *Flag) error {
 	var currentCmd = c.Commands[cmdName]
-	switch arg.Type {
+	switch flag.Type {
 	case TypeString:
-		currentCmd.Flags[arg.Name] = StringArgument{
-			Value:    currentCmd.FlagSet.String(arg.Name, arg.DefaultValue.(string), arg.HelpMsg),
-			Argument: arg,
+		currentCmd.Flags[flag.Name] = StringArgument{
+			Value: currentCmd.FlagSet.String(flag.Name, flag.DefaultValue.(string), flag.HelpMsg),
+			Flag:  flag,
 		}
 	case TypeBool:
-		currentCmd.Flags[arg.Name] = BoolArgument{
-			Value:    currentCmd.FlagSet.Bool(arg.Name, arg.DefaultValue.(bool), arg.HelpMsg),
-			Argument: arg,
+		currentCmd.Flags[flag.Name] = BoolArgument{
+			Value: currentCmd.FlagSet.Bool(flag.Name, flag.DefaultValue.(bool), flag.HelpMsg),
+			Flag:  flag,
 		}
 	case TypeInt:
-		currentCmd.Flags[arg.Name] = IntArgument{
-			Value:    currentCmd.FlagSet.Int(arg.Name, arg.DefaultValue.(int), arg.HelpMsg),
-			Argument: arg,
+		currentCmd.Flags[flag.Name] = IntArgument{
+			Value: currentCmd.FlagSet.Int(flag.Name, flag.DefaultValue.(int), flag.HelpMsg),
+			Flag:  flag,
 		}
 	case TypeInvalid:
-		return fmt.Errorf("invalid arugment type: %d", arg.Type)
+		return fmt.Errorf("invalid arugment type: %d", flag.Type)
 	}
 	return nil
 }
@@ -144,7 +144,7 @@ func CreateCLI(commands map[string]SubCommand) (*CLI, error) {
 	}
 	for name, cmd := range commands {
 		newCLI.AddCommand(name, cmd.ErrorHandler)
-		for _, arg := range cmd.Arguments {
+		for _, arg := range cmd.Flags {
 			err := newCLI.AddCommandArgs(name, arg)
 			if err != nil {
 				return nil, err

@@ -1,9 +1,9 @@
 package cli
 
-type ArgType int
+type FlagType int
 
 const (
-	TypeInvalid ArgType = iota
+	TypeInvalid FlagType = iota
 	TypeInt
 	TypeBool
 	TypeString

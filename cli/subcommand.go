@@ -3,7 +3,7 @@ package cli
 import "flag"
 
 type SubCommand struct {
-	Arguments    []*Argument
+	Flags        []*Flag
 	Parameters   []*Parameter
 	ErrorHandler flag.ErrorHandling
 }

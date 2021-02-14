@@ -6,7 +6,7 @@ import (
 )
 
 type Parameter struct {
-	Type         ArgType
+	Type         FlagType
 	Name         string
 	Position     int
 	Value        interface{}

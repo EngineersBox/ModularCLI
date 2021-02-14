@@ -11,7 +11,7 @@ import (
 var commands = map[string]cli.SubCommand{
 	"test": {
 		ErrorHandler: flag.ExitOnError,
-		Arguments: []*cli.Argument{
+		Flags: []*cli.Flag{
 			{
 				Type:         cli.TypeString,
 				Name:         "file",
