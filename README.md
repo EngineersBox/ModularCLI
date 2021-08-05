@@ -25,7 +25,7 @@ import (
 var commands = map[string]cli.SubCommand{
     "create": {
         ErrorHandler: flag.ExitOnError,
-        Arguments: []*cli.Argument{
+        Flags: []*cli.Flag{
             {
                 Type:         cli.TypeString,
                 Name:         "input",
@@ -44,7 +44,7 @@ var commands = map[string]cli.SubCommand{
     },
     "dataset": {
         ErrorHandler: flag.ExitOnError,
-        Arguments: []*cli.Argument{
+        Flags: []*cli.Flag{
             {
                 Type:         cli.TypeString,
                 Name:         "from",
