@@ -66,9 +66,9 @@ var commands = map[string]cli.SubCommand{
                 Required:     false,
             },
             {
-                Type:         cli.TypeBool,
+                Type:         cli.TypeInt,
                 Name:         "count",
-                DefaultValue: false,
+                DefaultValue: 0,
                 HelpMsg:      "How many files to read",
                 Required:     false,
             },
